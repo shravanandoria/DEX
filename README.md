@@ -20,5 +20,5 @@ Maximum Allowed Leverage: Provided during contract deployment <br />
 3. Once the tokens are deposited user can view their deposited tokens by calling the address_to_userBal(user_addr) function.
 4. Now the user can use these deposited tokens to open as many positions as they want simply by calling the openPosition() function. The user has to provide the collateral amount, it should be <= deposited token amount, leverage for ex:- if the user has put 2 then it is 2X leverage, and type of position, true means long position and false means short position.
 5. Once the position is opened, the user can modify the eth/usd asset value however they like by calling and providing a new price to the update_current_eth_usd_price(new_price) function.
-6. Now user can close the position by providing the position id to the closePosition(position_id) function.
+6. Now user can close the position by providing the position id to the closePosition(position_id) function. For a new user position Id starts from 0 and as user creates new positions, the position id get incremented by 1.
 7. As per the user's position P/L the user's account balance is updated.
