@@ -63,6 +63,8 @@ describe("Test Case for the DEX contract", function() {
   // OPENING A LONG POSITION WITH 100 USD COLLATERAL WHICH WILL BE DEDUCTED FROM INITALLY DEPOSITED 100 USD
   it("Testing Long Position - Testing Profit Calulation", async () => {
     user_bal_before_long_profit_position_opening = parseInt( await dex_contract.connect(account1).address_to_userBal(account1_addr))
+    console.log({user_bal_before_long_profit_position_opening})
+
     await dex_contract.connect(account1).openPosition(100, 2, true); // 100 - COLLATERAL, 2 - LEVERAGE, true - LONG POSITION
   })
 
@@ -75,6 +77,8 @@ describe("Test Case for the DEX contract", function() {
   it("Closing Profitable Position", async () => {
     await dex_contract.connect(account1).closePosition(0);
     const user_bal_after_closing_profit_long_position = await dex_contract.connect(account1).address_to_userBal(account1_addr)
+    console.log({user_bal_after_closing_profit_long_position})
+
     expect(user_bal_after_closing_profit_long_position).greaterThan(user_bal_before_long_profit_position_opening)
   })
 
@@ -89,6 +93,8 @@ describe("Test Case for the DEX contract", function() {
   // OPENING 2ND LONG POSITION
   it("Testing Long Position - Testing Loss Calulation", async () => {    
     user_bal_before_loss_long_position = parseInt( await dex_contract.connect(account1).address_to_userBal(account1_addr))
+    console.log({user_bal_before_loss_long_position})
+
     await dex_contract.connect(account1).openPosition(100, 2, true);
   })
 
@@ -103,6 +109,7 @@ describe("Test Case for the DEX contract", function() {
     const before_closing = await dex_contract.address_to_userBal(account1_addr)
     await dex_contract.connect(account1).closePosition(1);
     const user_bal_after_loss_long_position = parseInt( await dex_contract.connect(account1).address_to_userBal(account1_addr))
+    console.log({user_bal_after_loss_long_position})
     expect(user_bal_after_loss_long_position).lessThan( user_bal_before_loss_long_position);
   })
 
@@ -124,6 +131,8 @@ describe("Test Case for the DEX contract", function() {
   // OPENING SHORT POSITION
   it("Testing Short Position - Testing Profit Calulation", async () => {
     user_bal_before_profit_short_position = parseInt( await dex_contract.connect(account2).address_to_userBal(account2_addr))
+    console.log({user_bal_before_profit_short_position})
+
     await dex_contract.connect(account2).openPosition(100, 2, false);
   })
 
@@ -136,6 +145,7 @@ describe("Test Case for the DEX contract", function() {
   it("Closing Profitable Position", async () => {
     await dex_contract.connect(account2).closePosition(0);
     const user_bal_after_profit_short_position = parseInt( await dex_contract.connect(account2).address_to_userBal(account2_addr))
+    console.log({user_bal_after_profit_short_position})
     expect(user_bal_after_profit_short_position).greaterThan(user_bal_before_profit_short_position);
   })
 
@@ -149,11 +159,12 @@ describe("Test Case for the DEX contract", function() {
   
   it("Testing Short Position - Testing Loss Calulation", async () => {
     user_bal_before_loss_short_position = parseInt( await dex_contract.connect(account2).address_to_userBal(account2_addr));
+    console.log({user_bal_before_loss_short_position})
     await dex_contract.connect(account2).openPosition(100, 2, false);
   })
 
   // LET'S SAY THE PRICE OF ETH/USD INCREASED FROM $50 -> $60
-  it("Updating asset amount from $50 to $40", async () => {
+  it("Updating asset amount from $50 to $60", async () => {
     await dex_contract.connect(account2).update_current_eth_usd_price(60);
   })
 
@@ -162,6 +173,8 @@ describe("Test Case for the DEX contract", function() {
     await dex_contract.connect(account2).closePosition(1);
     
     const user_bal_after_loss_short_position = parseInt( await dex_contract.connect(account2).address_to_userBal(account2_addr))
+    console.log({user_bal_after_loss_short_position})
     expect(user_bal_after_loss_short_position).lessThan(user_bal_before_loss_short_position)
   })
 })
+

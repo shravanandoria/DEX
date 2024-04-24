@@ -8,7 +8,7 @@ contract DEX {
     // Position Details
     struct Position {
         bool is_long;
-        uint256 position_size;
+        uint256 position_size; // collateral_amount * leverage
         uint16 leverage; // amount of leverage, ex:- 2X, 5x, 15X
         uint256 collateral_amount;
         address position_owner;
@@ -47,6 +47,7 @@ contract DEX {
 
     // Function to manually modify the price of ETH/USDC pair
     function update_current_eth_usd_price(uint256 new_price) external {
+        require(new_price > 0, "Invalid new price");
         current_eth_usd_price = new_price * one_USDC;
     }
 
@@ -69,7 +70,7 @@ contract DEX {
     
     // Multiple Positions can be created with this function
     function openPosition(uint256 _collateralAmount, uint16 leverage, bool _isLong) external {
-        require(leverage <= max_allowed_leverage, "Please input a valid leverage amount");
+        require(leverage <= max_allowed_leverage && leverage > 0, "Please input a valid leverage amount");
         require(_collateralAmount > 0, "Please input a valid amount");
         require(address_to_userBal[msg.sender] >= _collateralAmount * one_USDC, "You do not have enough deposited USDC");
 
@@ -127,9 +128,4 @@ contract DEX {
         // 
         user_position.position_status = false;
     }
-
-
-    
-    
-    
 }
